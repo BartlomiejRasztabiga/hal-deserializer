@@ -4,14 +4,14 @@ import java.util.List;
 
 public class HalParser {
 
-    public <T> T parseObjectFromJson(String json) {
+    public <T> T parseObjectFromJson(String json, Class targetClass) {
         return null;
     }
 
-    public <T> List<T> parseListFromJson(String json) {
+    public <T> List<T> parseListFromJson(String json, Class targetClass) {
         JSONObject root = new JSONObject(json);
-        Resource resource = new Resource(root);
-        return resource.parseList();
+        ResourceBundle resourceBundle = new ResourceBundle(root, targetClass);
+        return null;
     }
 
 

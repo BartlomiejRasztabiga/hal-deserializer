@@ -21,7 +21,7 @@ public class HalDeserializer {
     }
 
     //TODO Repeating code
-    public <T> T toObject() {
+    public <T> T toObject(Class targetClass) {
         String json;
         try {
             json = getJsonStringFromUrl();
@@ -29,11 +29,10 @@ public class HalDeserializer {
             System.out.println("JSON is empty!");
             return null;
         }
-        System.out.println(json);
-        return parser.parseObjectFromJson(json);
+        return parser.parseObjectFromJson(json, targetClass);
     }
 
-    public <T> List<T> toList() {
+    public <T> List<T> toList(Class targetClass) {
         String json;
         try {
             json = getJsonStringFromUrl();
@@ -41,7 +40,7 @@ public class HalDeserializer {
             System.out.println("JSON is empty!");
             return null;
         }
-        return parser.parseListFromJson(json);
+        return parser.parseListFromJson(json, targetClass);
     }
 
     private String getJsonStringFromUrl() throws Exception {

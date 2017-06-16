@@ -17,7 +17,7 @@ public class App {
                 .withParams(new HashMap<>())
                 .build();
 
-        halDeserializer.toList();
+        halDeserializer.toList(Student.class);
 
     }
 
