@@ -1,6 +1,10 @@
+import okhttp3.Headers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,12 +19,40 @@ public class HalDeserializer {
         this.parser = new HalParser();
     }
 
+    //TODO Repeating code
     public <T> T toObject() {
-
+        String json;
+        try {
+            json = getJsonStringFromUrl();
+        } catch (Exception e) {
+            System.out.println("JSON is empty!");
+            return null;
+        }
+        System.out.println(json);
+        return parser.parseObjectFromJson(json);
     }
 
     public <T> List<T> toList() {
+        String json;
+        try {
+            json = getJsonStringFromUrl();
+        } catch (Exception e) {
+            System.out.println("JSON is empty!");
+            return null;
+        }
+        return parser.parseListFromJson(json);
+    }
 
+    private String getJsonStringFromUrl() throws Exception {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(baseUrl) //TODO Add params
+                .headers(Headers.of(httpHeaders))
+                .build();
+
+        Response response = client.newCall(request).execute();
+        return response.body().string();
     }
 
     public static class Builder {

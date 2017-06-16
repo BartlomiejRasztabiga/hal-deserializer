@@ -1,4 +1,14 @@
+import java.util.List;
+
 public class HalParser {
-    private String json;
+
+    public <T> T parseObjectFromJson(String json) {
+        return null;
+    }
+
+    public <T> List<T> parseListFromJson(String json) {
+        return null;
+    }
+
 
 }
