@@ -13,7 +13,7 @@ public class App {
         headers.put("Authorization", "Bearer " + getAuthToken());
 
         HalDeserializer halDeserializer = new HalDeserializer.Builder()
-                .baseUrl("http://api-v2.eu-central-1.elasticbeanstalk.com/students/")
+                .baseUrl("http://api-v2.eu-central-1.elasticbeanstalk.com/students/s") //TODO Check if URL is good
                 .withHeaders(headers)
                 .withParams(new HashMap<>())
                 .build();

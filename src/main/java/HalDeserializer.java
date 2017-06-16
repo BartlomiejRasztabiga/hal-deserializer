@@ -3,6 +3,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -36,14 +37,17 @@ public class HalDeserializer {
         String json;
         try {
             json = getJsonStringFromUrl();
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("JSON is empty!");
+            return null;
+        } catch (ResourceNotFoundException e) {
+            System.out.println("Resource not found. Check your URL. " + e.getMessage());
             return null;
         }
         return parser.parseListFromJson(json, targetClass);
     }
 
-    private String getJsonStringFromUrl() throws Exception {
+    private String getJsonStringFromUrl() throws IOException, ResourceNotFoundException {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -52,6 +56,7 @@ public class HalDeserializer {
                 .build();
 
         Response response = client.newCall(request).execute();
+        if(response.code() == 404 || response.code() == 500) throw new ResourceNotFoundException("Http code: " + response.code());
         return response.body().string();
     }
 
