@@ -12,12 +12,12 @@ public class App {
         headers.put("Authorization", "Bearer " + getAuthToken());
 
         HalDeserializer halDeserializer = new HalDeserializer.Builder()
-                .baseUrl("http://api-v2.eu-central-1.elasticbeanstalk.com/")
+                .baseUrl("http://api-v2.eu-central-1.elasticbeanstalk.com/students/")
                 .withHeaders(headers)
                 .withParams(new HashMap<>())
                 .build();
 
-        halDeserializer.toObject();
+        halDeserializer.toList();
 
     }
 

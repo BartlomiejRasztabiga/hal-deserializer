@@ -1,3 +1,5 @@
+import org.json.JSONObject;
+
 import java.util.List;
 
 public class HalParser {
@@ -7,7 +9,9 @@ public class HalParser {
     }
 
     public <T> List<T> parseListFromJson(String json) {
-        return null;
+        JSONObject root = new JSONObject(json);
+        Resource resource = new Resource(root);
+        return resource.parseList();
     }
 
 
