@@ -1,4 +1,4 @@
-group 'pl.infinitefuture'
+group 'pl.bartlomiej-rasztabiga'
 version '0.0.1'
 
 apply plugin: 'java'
