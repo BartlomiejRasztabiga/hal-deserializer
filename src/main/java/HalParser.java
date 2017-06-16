@@ -10,8 +10,8 @@ public class HalParser {
 
     public <T> List<T> parseListFromJson(String json, Class targetClass) {
         JSONObject root = new JSONObject(json);
-        ResourceBundle resourceBundle = new ResourceBundle(root, targetClass);
-        return null;
+        ResourceBundle<T> resourceBundle = new ResourceBundle<>(root, targetClass);
+        return resourceBundle.getResources();
     }
 
 

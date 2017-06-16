@@ -11,16 +11,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ResourceBundle {
+public class ResourceBundle<T> {
 
     private List<Link> links;
-    private List<Resource> resources;
+    private List<T> resources;
     private Class targetClass;
 
     public ResourceBundle(JSONObject root, Class targetClass) {
         this.targetClass = targetClass;
         this.resources = retrieveResources(root.getJSONObject("_embedded"));
         this.links = retrieveLinks(root.getJSONObject("_links"));
+    }
+
+    public List<T> getResources() {
+        return resources;
     }
 
     private List<Link> retrieveLinks(JSONObject _links) {
@@ -33,38 +37,62 @@ public class ResourceBundle {
         return links;
     }
 
-    private List<Resource> retrieveResources(JSONObject _embedded) {
+    private List<T> retrieveResources(JSONObject _embedded) {
 
         String rootObject = _embedded.keySet().toArray()[0].toString(); //maybe
         JSONArray root = _embedded.getJSONArray(rootObject);
 
         Iterator<Object> iterator = root.iterator();
 
-        List<Resource> resources = new ArrayList<>();
-        List<String> classFields = retrieveClassFieldsList();
+
+        List<T> resources = new ArrayList<>();
+
+        List<Field> classFields = retrieveClassFieldsList();
 
         while (iterator.hasNext()) {
             JSONObject object = (JSONObject) iterator.next();
             resources.add(parseResource(object, classFields));
         }
 
-        System.out.println(classFields);
-        System.out.println(resources);
         //TODO
 
         return resources;
     }
 
-    private Resource parseResource(JSONObject json, List<String> classFields) {
-        //TODO
-        return null;
+    private <T> T parseResource(JSONObject json, List<Field> classFields) {
+        try {
+            Object object = targetClass.newInstance();
+            for (Field classField : classFields) {
+                Object fieldValue = null;
+                try {
+                    fieldValue = json.get(classField.getName());
+                } catch (JSONException e) {
+                    continue; //IF field is not present in json, skip it
+                }
+                //System.out.println(fieldValue);
+                classField.setAccessible(true);
+                if(fieldValue instanceof Integer) {
+                    Long fieldValueNew = (long) (int) fieldValue;
+                    classField.set(object, fieldValueNew);
+                } else {
+                    classField.set(object, fieldValue);
+                }
+
+            }
+
+            //TODO I finished here
+
+            return (T) object;
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    private List<String> retrieveClassFieldsList() {
+
+    private List<Field> retrieveClassFieldsList() {
         Field[] fields = targetClass.getDeclaredFields();
-        return Arrays.stream(fields)
-                .map(Field::getName)
-                .collect(Collectors.toList());
+        return Arrays.asList(fields);
     }
 
     private Link addLink(String name, JSONObject _links) {

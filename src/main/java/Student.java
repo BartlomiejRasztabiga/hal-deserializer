@@ -30,4 +30,15 @@ public class Student {
     public boolean isOnDuty() {
         return isOnDuty;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", studentNumber=" + studentNumber +
+                ", studentName='" + studentName + '\'' +
+                ", studentSurname='" + studentSurname + '\'' +
+                ", isOnDuty=" + isOnDuty +
+                '}';
+    }
 }

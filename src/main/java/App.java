@@ -3,6 +3,7 @@ import okhttp3.internal.http.HttpHeaders;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class App {
@@ -17,7 +18,9 @@ public class App {
                 .withParams(new HashMap<>())
                 .build();
 
-        halDeserializer.toList(Student.class);
+
+        List<Student> studentList = halDeserializer.toList(Student.class);
+        studentList.forEach(System.out::println);
 
     }
 
