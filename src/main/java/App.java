@@ -1,5 +1,5 @@
+import entities.Student;
 import okhttp3.*;
-import okhttp3.internal.http.HttpHeaders;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class App {
         System.out.println(getAuthToken());
 
         HalDeserializer halDeserializer = new HalDeserializer.Builder()
-                .baseUrl("http://api-v2.eu-central-1.elasticbeanstalk.com/accounts/1")
+                .baseUrl("http://api-v2.eu-central-1.elasticbeanstalk.com/students")
                 .withHeaders(headers)
                 .withParams(new HashMap<>())
                 .build();

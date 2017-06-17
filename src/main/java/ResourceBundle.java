@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ResourceBundle<T> {
     private Class targetClass;
@@ -32,7 +31,7 @@ public class ResourceBundle<T> {
             _embedded = rootObject.getJSONObject("_embedded");
         } catch (JSONException e) {
             //It might mean that resource is not list
-            if(e.getMessage().contains("JSONObject[\"_embedded\"] not found")) {
+            if (e.getMessage().contains("JSONObject[\"_embedded\"] not found")) {
                 throw new DeserializationError("Resource cannot be deserialized to list!");
             }
         }
@@ -78,16 +77,26 @@ public class ResourceBundle<T> {
         try {
             Object object = targetClass.newInstance();
             for (Field classField : classFields) {
-                Object fieldValue;
+                Object fieldValue = null;
                 try {
                     fieldValue = json.get(classField.getName());
                 } catch (JSONException e) {
-                    continue; //IF field is not present in json, skip it
+                    //Check if boolean field starts with "is" and remove it (compatible with SpringDataRest)
+                    if (classField.getType().equals(Boolean.class)) {
+                        String fieldName = classField.getName();
+                        if (fieldName.contains("is")) {
+                            fieldName = fieldName.replace("is", "");
+                            fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
+                            fieldValue = json.get(fieldName);
+                        }
+                    } else {
+                        continue; //IF field is not present in json, skip it
+                    }
                 }
                 classField.setAccessible(true);
 
                 //Check if we should parse int to longs (JSON returns int, but ID is of type long)
-                if(fieldValue instanceof Integer) {
+                if (fieldValue instanceof Integer) {
                     Long fieldValueNew = (long) (int) fieldValue;
                     classField.set(object, fieldValueNew);
                 } else {
