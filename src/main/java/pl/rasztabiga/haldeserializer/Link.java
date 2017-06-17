@@ -1,3 +1,5 @@
+package pl.rasztabiga.haldeserializer;
+
 import java.net.URL;
 
 public class Link {
@@ -15,7 +17,7 @@ public class Link {
 
     @Override
     public String toString() {
-        return "Link{" +
+        return "pl.rasztabiga.haldeserializer.Link{" +
                 "name='" + name + '\'' +
                 ", href=" + href +
                 '}';

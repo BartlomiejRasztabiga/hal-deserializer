@@ -1,6 +1,6 @@
-import entities.Account;
-import entities.Exam;
-import entities.Student;
+package pl.rasztabiga.haldeserializer;
+
+import pl.rasztabiga.haldeserializer.entities.Account;
 import okhttp3.*;
 import org.json.JSONObject;
 
@@ -12,18 +12,20 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + getAuthToken());
-        System.out.println(getAuthToken());
+        Map.Entry<String, String> authenticationHeader = Authentication.getOAuthTokenHeader()
+        headers.put();
+        //System.out.println(getAuthToken());
 
         HalDeserializer halDeserializer = new HalDeserializer.Builder()
-                .baseUrl("http://api-v2.eu-central-1.elasticbeanstalk.com/accounts")
+                .baseUrl("http://api-v2.eu-central-1.elasticbeanstalk.com/accounts/1")
                 .withHeaders(headers)
                 .withParams(new HashMap<>())
                 .build();
 
-
-        List<Account> list = halDeserializer.toList(Account.class);
-        list.forEach(System.out::println);
+        Account account = halDeserializer.toObject(Account.class);
+        System.out.println(account);
+        //List<Account> list = halDeserializer.toList(Account.class);
+        //list.forEach(System.out::println);
 
 
     }

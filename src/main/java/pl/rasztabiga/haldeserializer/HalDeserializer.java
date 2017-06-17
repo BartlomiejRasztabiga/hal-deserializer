@@ -1,3 +1,5 @@
+package pl.rasztabiga.haldeserializer;
+
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -6,7 +8,7 @@ import okhttp3.Response;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -23,12 +25,13 @@ public class HalDeserializer {
 
     //TODO Repeating code
     public <T> T toObject(Class<T> targetClass) { //TODO Finish this
-        String json;
+        String json = "";
         try {
             json = getJsonStringFromUrl();
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("JSON is empty!");
-            return null;
+        } catch (ResourceNotFoundException e) {
+            System.out.println("Resource not found. Check your URL. " + e.getMessage());
         }
         return parser.parseObjectFromJson(json, targetClass);
     }
@@ -39,10 +42,10 @@ public class HalDeserializer {
             json = getJsonStringFromUrl();
         } catch (IOException e) {
             System.out.println("JSON is empty!");
-            return null;
+            return Collections.emptyList();
         } catch (ResourceNotFoundException e) {
             System.out.println("Resource not found. Check your URL. " + e.getMessage());
-            return null;
+            return Collections.emptyList();
         }
         return parser.parseListFromJson(json, targetClass);
     }
@@ -56,7 +59,11 @@ public class HalDeserializer {
                 .build();
 
         Response response = client.newCall(request).execute();
-        if(response.code() == 404 || response.code() == 500) throw new ResourceNotFoundException("Http code: " + response.code());
+
+        //TODO Move checking response code to other class
+        if (response.code() == 404 || response.code() == 500) {
+            throw new ResourceNotFoundException("Http code: " + response.code());
+        }
         return response.body().string();
     }
 

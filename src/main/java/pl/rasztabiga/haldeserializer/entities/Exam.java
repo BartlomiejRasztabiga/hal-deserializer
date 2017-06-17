@@ -1,4 +1,4 @@
-package entities;
+package pl.rasztabiga.haldeserializer.entities;
 
 import java.util.Date;
 
@@ -19,7 +19,7 @@ public class Exam {
     }
 
     public Date getDate() {
-        return date;
+        return new Date(date.getTime());
     }
 
     public String getSubject() {

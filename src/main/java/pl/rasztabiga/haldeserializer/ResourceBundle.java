@@ -1,6 +1,9 @@
+package pl.rasztabiga.haldeserializer;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import sun.security.krb5.internal.crypto.Des;
 
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
@@ -15,6 +18,7 @@ public class ResourceBundle<T> {
 
     private List<Link> links;
     private List<T> resources;
+    private T resource;
 
     public ResourceBundle(JSONObject root, Class targetClass) {
         this.targetClass = targetClass;
@@ -31,7 +35,7 @@ public class ResourceBundle<T> {
         } catch (JSONException e) {
             //It might mean that resource is not list
             if (e.getMessage().contains("JSONObject[\"_embedded\"] not found")) {
-                throw new DeserializationError("Resource cannot be deserialized to list!");
+                throw new DeserializationError("pl.rasztabiga.haldeserializer.Resource cannot be deserialized to list!");
             }
         }
 
@@ -41,14 +45,11 @@ public class ResourceBundle<T> {
         return resources;
     }
 
-    private List<Link> retrieveLinks(JSONObject _links) {
-        links = new ArrayList<>();
+    public T getResource() throws DeserializationError {
+        this.resource = retrieveResource(rootObject);
+        this.links = retrieveLinks(rootObject.getJSONObject("_links"));
 
-        links.add(addLink("search", _links));
-        links.add(addLink("profile", _links));
-        links.add(addLink("self", _links));
-
-        return links;
+        return resource;
     }
 
     private List<T> retrieveResources(JSONObject _embedded) {
@@ -72,7 +73,24 @@ public class ResourceBundle<T> {
         return resources;
     }
 
-    private <T> T parseResource(JSONObject json, List<Field> classFields) { //TODO Add proxy class Resource<T> that holds content and links
+    private T retrieveResource(JSONObject root) {
+        List<Field> classFields = retrieveClassFieldsList();
+        resource = parseResource(root, classFields);
+
+        return resource;
+    }
+
+    private List<Link> retrieveLinks(JSONObject _links) {
+        links = new ArrayList<>();
+
+        links.add(addLink("search", _links));
+        links.add(addLink("profile", _links));
+        links.add(addLink("self", _links));
+
+        return links;
+    }
+
+    private <T> T parseResource(JSONObject json, List<Field> classFields) { //TODO Add proxy class pl.rasztabiga.haldeserializer.Resource<T> that holds content and links
         try {
             Object targetClassInstance = targetClass.newInstance();
             for (Field classField : classFields) {
@@ -83,7 +101,7 @@ public class ResourceBundle<T> {
                     //Check if boolean field starts with "is" and remove it (compatible with SpringDataRest)
                     if (classField.getType().equals(Boolean.class)) {
                         String fieldName = classField.getName();
-                        if (fieldName.substring(0,2).contains("is")) {
+                        if (fieldName.substring(0, 2).contains("is")) {
                             try {
                                 fieldName = fieldName.replaceFirst("is", "");
                                 fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
@@ -116,9 +134,7 @@ public class ResourceBundle<T> {
                         e.printStackTrace();
                         classField.set(targetClassInstance, null);
                     }
-                }
-
-                else {
+                } else {
                     classField.set(targetClassInstance, fieldValue);
                 }
 

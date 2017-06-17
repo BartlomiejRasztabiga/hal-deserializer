@@ -1,4 +1,4 @@
-package entities;
+package pl.rasztabiga.haldeserializer.entities;
 
 import java.util.List;
 
