@@ -1,0 +1,37 @@
+package entities;
+
+import java.util.Date;
+
+public class Exam {
+
+    private Long id;
+
+    private Date date;
+
+    private String subject;
+
+    private String description;
+
+    private Boolean isVisible;
+
+    public Long getId() {
+        return id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+}

@@ -1,3 +1,4 @@
+package entities;
 
 public class Student {
 
@@ -9,7 +10,7 @@ public class Student {
 
     private String studentSurname;
 
-    private boolean isOnDuty;
+    private Boolean isOnDuty;
 
     public Long getId() {
         return id;
@@ -27,13 +28,13 @@ public class Student {
         return studentSurname;
     }
 
-    public boolean isOnDuty() {
+    public Boolean isOnDuty() {
         return isOnDuty;
     }
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "entities.Student{" +
                 "id=" + id +
                 ", studentNumber=" + studentNumber +
                 ", studentName='" + studentName + '\'' +
