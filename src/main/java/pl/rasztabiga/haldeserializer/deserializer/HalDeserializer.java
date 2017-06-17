@@ -1,5 +1,7 @@
 package pl.rasztabiga.haldeserializer.deserializer;
 
+import org.json.JSONObject;
+import pl.rasztabiga.haldeserializer.exception.DeserializationError;
 import pl.rasztabiga.haldeserializer.exception.ResourceNotFoundException;
 
 import java.io.IOException;
@@ -47,7 +49,7 @@ public class HalDeserializer {
         } catch (ResourceNotFoundException e) {
             System.out.println("Resource not found. Check your URL. " + e.getMessage());
         }
-        return parser.parseObjectFromJson(json, targetClass);
+        return parseObjectFromJson(json, targetClass);
     }
 
     /**
@@ -68,7 +70,35 @@ public class HalDeserializer {
             System.out.println("Resource not found. Check your URL. " + e.getMessage());
             return Collections.emptyList();
         }
-        return parser.parseListFromJson(json, targetClass);
+        return parseListFromJson(json, targetClass);
+    }
+
+    <T> T parseObjectFromJson(String json, Class targetClass) {
+        if (json.isEmpty()) {
+            return null;
+        }
+        JSONObject root = new JSONObject(json);
+        ResourceBundle<T> resourceBundle = new ResourceBundle<>(root, targetClass);
+        try {
+            return resourceBundle.getResource();
+        } catch (DeserializationError e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    <T> List<T> parseListFromJson(String json, Class targetClass) {
+        if (json.isEmpty()) {
+            return Collections.emptyList();
+        }
+        JSONObject root = new JSONObject(json);
+        ResourceBundle<T> resourceBundle = new ResourceBundle<>(root, targetClass);
+        try {
+            return resourceBundle.getResources();
+        } catch (DeserializationError e) {
+            System.out.println(e.getMessage());
+            return Collections.emptyList();
+        }
     }
 
     private String getJsonStringFromUrl() throws IOException, ResourceNotFoundException {
