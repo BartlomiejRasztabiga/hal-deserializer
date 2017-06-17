@@ -42,6 +42,7 @@ public class App {
 
         Resource<Account> accountRes = halDeserializer.toObject(Account.class);
         Account account = accountRes.getContent();
+
         System.out.println(account);
     }
 
@@ -52,9 +53,10 @@ public class App {
                 .build();
 
         List<Resource<Account>> accountListRes = halDeserializer1.toList(Account.class);
-        List<Account> accountList = accountListRes.stream()
+        List<Account> accountList = accountListRes.stream() //TODO Can I do something with this?
                 .map(Resource::getContent)
                 .collect(Collectors.toList());
+
         System.out.println(accountList);
     }
 
@@ -73,6 +75,7 @@ public class App {
         List<Student> studentList = studentListRes.stream()
                 .map(Resource::getContent)
                 .collect(Collectors.toList());
+
         System.out.println(studentList);
     }
 }
