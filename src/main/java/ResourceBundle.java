@@ -5,10 +5,9 @@ import org.json.JSONObject;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class ResourceBundle<T> {
     private Class targetClass;
@@ -75,7 +74,7 @@ public class ResourceBundle<T> {
 
     private <T> T parseResource(JSONObject json, List<Field> classFields) { //TODO Add proxy class Resource<T> that holds content and links
         try {
-            Object object = targetClass.newInstance();
+            Object targetClassInstance = targetClass.newInstance();
             for (Field classField : classFields) {
                 Object fieldValue = null;
                 try {
@@ -84,10 +83,14 @@ public class ResourceBundle<T> {
                     //Check if boolean field starts with "is" and remove it (compatible with SpringDataRest)
                     if (classField.getType().equals(Boolean.class)) {
                         String fieldName = classField.getName();
-                        if (fieldName.contains("is")) {
-                            fieldName = fieldName.replace("is", "");
-                            fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
-                            fieldValue = json.get(fieldName);
+                        if (fieldName.substring(0,2).contains("is")) {
+                            try {
+                                fieldName = fieldName.replaceFirst("is", "");
+                                fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
+                                fieldValue = json.get(fieldName);
+                            } catch (JSONException e1) {
+                                continue; //TODO Shitty code
+                            }
                         }
                     } else {
                         continue; //IF field is not present in json, skip it
@@ -95,19 +98,35 @@ public class ResourceBundle<T> {
                 }
                 classField.setAccessible(true);
 
+                //TODO Shitty code down there XD
+
                 //Check if we should parse int to longs (JSON returns int, but ID is of type long)
                 if (fieldValue instanceof Integer) {
                     Long fieldValueNew = (long) (int) fieldValue;
-                    classField.set(object, fieldValueNew);
-                } else {
-                    classField.set(object, fieldValue);
+                    classField.set(targetClassInstance, fieldValueNew);
+                }
+                //Check if we should parse Date from String
+                else if (classField.getType().equals(Date.class)) {
+                    try {
+                        String dateString = (String) fieldValue;
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+                        Date date = simpleDateFormat.parse(dateString);
+                        classField.set(targetClassInstance, date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        classField.set(targetClassInstance, null);
+                    }
+                }
+
+                else {
+                    classField.set(targetClassInstance, fieldValue);
                 }
 
             }
 
             //TODO I finished here
 
-            return (T) object;
+            return (T) targetClassInstance;
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
             return null;

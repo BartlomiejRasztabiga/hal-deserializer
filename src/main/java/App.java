@@ -1,3 +1,5 @@
+import entities.Account;
+import entities.Exam;
 import entities.Student;
 import okhttp3.*;
 import org.json.JSONObject;
@@ -14,14 +16,15 @@ public class App {
         System.out.println(getAuthToken());
 
         HalDeserializer halDeserializer = new HalDeserializer.Builder()
-                .baseUrl("http://api-v2.eu-central-1.elasticbeanstalk.com/students")
+                .baseUrl("http://api-v2.eu-central-1.elasticbeanstalk.com/accounts")
                 .withHeaders(headers)
                 .withParams(new HashMap<>())
                 .build();
 
 
-        List<Student> studentList = halDeserializer.toList(Student.class);
-        studentList.forEach(System.out::println);
+        List<Account> list = halDeserializer.toList(Account.class);
+        list.forEach(System.out::println);
+
 
     }
 

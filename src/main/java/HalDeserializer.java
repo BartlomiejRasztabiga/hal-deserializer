@@ -22,7 +22,7 @@ public class HalDeserializer {
     }
 
     //TODO Repeating code
-    public <T> T toObject(Class targetClass) {
+    public <T> T toObject(Class<T> targetClass) { //TODO Finish this
         String json;
         try {
             json = getJsonStringFromUrl();
@@ -33,7 +33,7 @@ public class HalDeserializer {
         return parser.parseObjectFromJson(json, targetClass);
     }
 
-    public <T> List<T> toList(Class targetClass) {
+    public <T> List<T> toList(Class<T> targetClass) { //TODO Make targetClass more generic
         String json;
         try {
             json = getJsonStringFromUrl();
