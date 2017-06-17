@@ -1,6 +1,7 @@
 package pl.rasztabiga.haldeserializer;
 
 import okhttp3.*;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class Authentication {
             String accessToken = new JSONObject(response.body().string()).getString("access_token");
 
             return new AbstractMap.SimpleEntry<>("Authorization", "Bearer " + accessToken);
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             System.out.println("Couldn't get OAuth token");
             return null;
         }

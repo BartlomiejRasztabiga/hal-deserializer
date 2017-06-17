@@ -3,7 +3,6 @@ package pl.rasztabiga.haldeserializer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import sun.security.krb5.internal.crypto.Des;
 
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;

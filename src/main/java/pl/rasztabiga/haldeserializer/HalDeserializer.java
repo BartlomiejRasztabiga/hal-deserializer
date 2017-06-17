@@ -61,7 +61,7 @@ public class HalDeserializer {
         Response response = client.newCall(request).execute();
 
         //TODO Move checking response code to other class
-        if (response.code() == 404 || response.code() == 500) {
+        if (response.code() == 404 || response.code() == 500 || response.code() == 403 || response.code() == 401) {
             throw new ResourceNotFoundException("Http code: " + response.code());
         }
         return response.body().string();
