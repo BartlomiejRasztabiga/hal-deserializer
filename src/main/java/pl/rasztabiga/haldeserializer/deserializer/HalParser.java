@@ -64,7 +64,7 @@ public class HalParser {
                     classField.set(targetClassInstance, fieldValueNew);
                 }
                 //Check if we should convert JSONArray to List
-                else if (classField.getName().equals("numbers") && fieldValue instanceof JSONArray) { //TODO Make it more generic
+                else if (fieldValue instanceof JSONArray) { //TODO Make it more generic
                     JSONArray array = (JSONArray) fieldValue;
                     List<Object> list = array.toList();
                     classField.set(targetClassInstance, list);
