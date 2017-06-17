@@ -16,7 +16,7 @@ public class ResourceBundle<T> {
     private Class targetClass;
     private JSONObject rootObject;
 
-    private List<Link> links;
+    private List<HalLink> halLinks;
     private List<T> resources;
     private T resource;
 
@@ -40,14 +40,14 @@ public class ResourceBundle<T> {
         }
 
         this.resources = retrieveResources(_embedded);
-        this.links = retrieveLinks(rootObject.getJSONObject("_links"));
+        this.halLinks = retrieveLinks(rootObject.getJSONObject("_links"));
 
         return resources;
     }
 
     public T getResource() throws DeserializationError {
         this.resource = retrieveResource(rootObject);
-        this.links = retrieveLinks(rootObject.getJSONObject("_links"));
+        this.halLinks = retrieveLinks(rootObject.getJSONObject("_links"));
 
         return resource;
     }
@@ -80,17 +80,17 @@ public class ResourceBundle<T> {
         return resource;
     }
 
-    private List<Link> retrieveLinks(JSONObject _links) {
-        links = new ArrayList<>();
+    private List<HalLink> retrieveLinks(JSONObject _links) {
+        halLinks = new ArrayList<>();
 
-        links.add(addLink("search", _links));
-        links.add(addLink("profile", _links));
-        links.add(addLink("self", _links));
+        halLinks.add(addLink("search", _links));
+        halLinks.add(addLink("profile", _links));
+        halLinks.add(addLink("self", _links));
 
-        return links;
+        return halLinks;
     }
 
-    private <T> T parseResource(JSONObject json, List<Field> classFields) { //TODO Add proxy class pl.rasztabiga.haldeserializer.deserializer.Resource<T> that holds content and links
+    private <T> T parseResource(JSONObject json, List<Field> classFields) { //TODO Add proxy class pl.rasztabiga.haldeserializer.deserializer.Resource<T> that holds content and halLinks
         try {
             Object targetClassInstance = targetClass.newInstance();
             for (Field classField : classFields) {
@@ -155,11 +155,11 @@ public class ResourceBundle<T> {
         return Arrays.asList(fields);
     }
 
-    private Link addLink(String name, JSONObject _links) {
+    private HalLink addLink(String name, JSONObject _links) {
         try {
-            return new Link(name, new URL(_links.getJSONObject(name).getString("href")));
+            return new HalLink(name, new URL(_links.getJSONObject(name).getString("href")));
         } catch (JSONException | MalformedURLException e) {
-            return new Link(name);
+            return new HalLink(name);
         }
     }
 
