@@ -13,12 +13,14 @@ import java.util.Map;
 public class HalDeserializer {
     private URL baseUrl;
     private Map<String, String> httpHeaders;
-    private Map<String, String> params;
+    private Map<String, String> httpParams;
 
     private HalParser parser;
 
     private HalDeserializer() {
         this.parser = new HalParser();
+        this.httpHeaders = new HashMap<>();
+        this.httpParams = new HashMap<>();
     }
 
     //TODO Repeating code
@@ -49,7 +51,7 @@ public class HalDeserializer {
     }
 
     private String getJsonStringFromUrl() throws IOException, ResourceNotFoundException {
-        HttpClient client = new HttpClient(baseUrl, httpHeaders);
+        HttpClient client = new HttpClient(baseUrl, httpHeaders, httpParams);
         return client.getJsonString();
     }
 
@@ -70,7 +72,7 @@ public class HalDeserializer {
         }
 
         public Builder withHeaders(Map<String, String> headers) {
-            if (instance.httpHeaders == null) {
+            if (instance.httpHeaders.size() == 0) {
                 instance.httpHeaders = headers;
             } else {
                 for (Map.Entry<String, String> entry : headers.entrySet()) {
@@ -82,16 +84,12 @@ public class HalDeserializer {
         }
 
         public Builder withAuthentication(Authentication.Header header) {
-            if (instance.httpHeaders == null) {
-                instance.httpHeaders = new HashMap<>();
-            }
-
             instance.httpHeaders.put(Authentication.AUTHORIZATION, header.getToken());
             return this;
         }
 
         public Builder withParams(Map<String, String> params) {
-            instance.params = params;
+            instance.httpParams = params;
             return this;
         }
 
