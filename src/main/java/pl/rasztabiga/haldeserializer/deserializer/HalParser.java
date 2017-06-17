@@ -4,8 +4,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -83,5 +86,22 @@ public class HalParser {
         }
     }
 
+    List<HalLink> retrieveLinks(JSONObject _links) {
+        List<HalLink> halLinks = new ArrayList<>();
 
+        halLinks.add(addLink("search", _links));
+        halLinks.add(addLink("profile", _links));
+        halLinks.add(addLink("self", _links));
+
+        return halLinks;
+    }
+
+    private HalLink addLink(String name, JSONObject _links) {
+        try {
+            return new HalLink(name, new URL(_links.getJSONObject(name).getString("href")));
+        } catch (JSONException | MalformedURLException e) {
+            return new HalLink(name);
+        }
+    }
+    
 }
