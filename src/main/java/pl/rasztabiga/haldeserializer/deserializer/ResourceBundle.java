@@ -17,10 +17,6 @@ public class ResourceBundle<T> {
 
     private HalParser parser;
 
-    private List<HalLink> halLinks;
-    private List<Resource<T>> resources;
-    private Resource<T> resource;
-
     ResourceBundle(JSONObject root, Class targetClass) {
         this.targetClass = targetClass;
         this.rootObject = root;
@@ -38,17 +34,11 @@ public class ResourceBundle<T> {
             }
         }
 
-        this.resources = retrieveResources(_embedded);
-        this.halLinks = parser.retrieveLinks(rootObject.getJSONObject("_links"));
-
-        return resources;
+        return retrieveResources(_embedded);
     }
 
     Resource<T> getResource() throws DeserializationError {
-        this.resource = retrieveResource(rootObject);
-        this.halLinks = parser.retrieveLinks(rootObject.getJSONObject("_links"));
-
-        return resource;
+        return retrieveResource(rootObject);
     }
 
     private List<Resource<T>> retrieveResources(JSONObject _embedded) {
@@ -59,11 +49,9 @@ public class ResourceBundle<T> {
 
         List<Resource<T>> resources = new ArrayList<>();
 
-        List<Field> classFields = retrieveClassFieldsList();
-
         while (iterator.hasNext()) {
             JSONObject object = (JSONObject) iterator.next();
-            resources.add(parser.parseResource(object, classFields, targetClass));
+            resources.add(retrieveResource(object));
         }
 
         return resources;
@@ -71,15 +59,13 @@ public class ResourceBundle<T> {
 
     private Resource<T> retrieveResource(JSONObject root) {
         List<Field> classFields = retrieveClassFieldsList();
-        resource = parser.parseResource(root, classFields, targetClass);
-
-        return resource;
+        List<HalLink> links = parser.retrieveLinks(rootObject.getJSONObject("_links"));
+        return new Resource<>(parser.parseResource(root, classFields, targetClass), links);
     }
 
     private List<Field> retrieveClassFieldsList() {
         Field[] fields = targetClass.getDeclaredFields();
         return Arrays.asList(fields);
     }
-
 
 }
