@@ -1,8 +1,5 @@
 package pl.rasztabiga.haldeserializer.deserializer;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -11,6 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import pl.rasztabiga.haldeserializer.json.JSONArray;
+import pl.rasztabiga.haldeserializer.json.JSONException;
+import pl.rasztabiga.haldeserializer.json.JSONObject;
 
 /**
  * HalParser class representing HAL+JSON parser
@@ -61,6 +62,12 @@ public class HalParser {
                 if (fieldValue instanceof Integer) {
                     Long fieldValueNew = (long) (int) fieldValue;
                     classField.set(targetClassInstance, fieldValueNew);
+                }
+                //Check if we should convert JSONArray to List
+                else if (classField.getName().equals("numbers") && fieldValue instanceof JSONArray) { //TODO Make it more generic
+                    JSONArray array = (JSONArray) fieldValue;
+                    List<Object> list = array.toList();
+                    classField.set(targetClassInstance, list);
                 }
                 //Check if we should parse Date from String
                 else if (classField.getType().equals(Date.class)) {

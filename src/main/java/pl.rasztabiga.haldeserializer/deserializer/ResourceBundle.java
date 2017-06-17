@@ -1,9 +1,9 @@
 package pl.rasztabiga.haldeserializer.deserializer;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import pl.rasztabiga.haldeserializer.exception.DeserializationError;
+import pl.rasztabiga.haldeserializer.json.JSONArray;
+import pl.rasztabiga.haldeserializer.json.JSONException;
+import pl.rasztabiga.haldeserializer.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class ResourceBundle<T> {
     private Resource<T> retrieveResource(JSONObject root) {
         List<Field> classFields = retrieveClassFieldsList();
         List<HalLink> links = parser.retrieveLinks(rootObject.getJSONObject("_links"));
-        return new Resource<>(parser.parseResource(root, classFields, targetClass), links);
+        return new Resource<>(parser.<T>parseResource(root, classFields, targetClass), links);
     }
 
     private List<Field> retrieveClassFieldsList() {

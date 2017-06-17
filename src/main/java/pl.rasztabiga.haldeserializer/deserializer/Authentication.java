@@ -1,8 +1,8 @@
 package pl.rasztabiga.haldeserializer.deserializer;
 
 import okhttp3.*;
-import org.json.JSONException;
-import org.json.JSONObject;
+import pl.rasztabiga.haldeserializer.json.JSONException;
+import pl.rasztabiga.haldeserializer.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;

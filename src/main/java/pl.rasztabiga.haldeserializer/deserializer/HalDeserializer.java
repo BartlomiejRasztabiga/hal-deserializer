@@ -1,8 +1,8 @@
 package pl.rasztabiga.haldeserializer.deserializer;
 
-import org.json.JSONObject;
 import pl.rasztabiga.haldeserializer.exception.DeserializationError;
 import pl.rasztabiga.haldeserializer.exception.ResourceNotFoundException;
+import pl.rasztabiga.haldeserializer.json.JSONObject;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
