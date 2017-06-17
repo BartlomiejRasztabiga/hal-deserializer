@@ -27,6 +27,8 @@ public class HalParser {
     public HalParser() {
     }
 
+    // FIXME: 17.06.2017 
+    @SuppressWarnings("unchecked")
     <T> T parseResource(JSONObject json, List<Field> classFields, Class targetClass) { //TODO Add proxy class Resource<T> that holds content and halLinks
         try {
             Object targetClassInstance = targetClass.newInstance();
