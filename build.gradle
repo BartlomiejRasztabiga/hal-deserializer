@@ -1,7 +1,18 @@
-group 'pl.bartlomiej-rasztabiga'
-version '0.0.1'
+group 'pl.rasztabiga'
+version '1.0.0'
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.0'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
+
 
 sourceCompatibility = 1.8
 
@@ -17,5 +28,6 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.8.0'
-
 }
+
+
