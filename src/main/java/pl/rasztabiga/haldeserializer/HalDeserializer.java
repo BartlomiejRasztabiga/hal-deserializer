@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,7 +85,23 @@ public class HalDeserializer {
         }
 
         public Builder withHeaders(Map<String, String> headers) {
-            instance.httpHeaders = headers;
+            if (instance.httpHeaders == null) {
+                instance.httpHeaders = headers;
+            } else {
+                for (Map.Entry<String, String> entry : headers.entrySet()) {
+                    instance.httpHeaders.put(entry.getKey(), entry.getValue());
+                }
+            }
+
+            return this;
+        }
+
+        public Builder withAuthentication(Authentication.Header header) {
+            if (instance.httpHeaders == null) {
+                instance.httpHeaders = new HashMap<>();
+            }
+
+            instance.httpHeaders.put(Authentication.AUTHORIZATION, header.getToken());
             return this;
         }
 
