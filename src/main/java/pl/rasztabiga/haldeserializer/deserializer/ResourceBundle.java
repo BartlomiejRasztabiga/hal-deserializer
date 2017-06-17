@@ -1,4 +1,4 @@
-package pl.rasztabiga.haldeserializer;
+package pl.rasztabiga.haldeserializer.deserializer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +35,7 @@ public class ResourceBundle<T> {
         } catch (JSONException e) {
             //It might mean that resource is not list
             if (e.getMessage().contains("JSONObject[\"_embedded\"] not found")) {
-                throw new DeserializationError("pl.rasztabiga.haldeserializer.Resource cannot be deserialized to list!");
+                throw new DeserializationError("pl.rasztabiga.haldeserializer.deserializer.Resource cannot be deserialized to list!");
             }
         }
 
@@ -90,7 +90,7 @@ public class ResourceBundle<T> {
         return links;
     }
 
-    private <T> T parseResource(JSONObject json, List<Field> classFields) { //TODO Add proxy class pl.rasztabiga.haldeserializer.Resource<T> that holds content and links
+    private <T> T parseResource(JSONObject json, List<Field> classFields) { //TODO Add proxy class pl.rasztabiga.haldeserializer.deserializer.Resource<T> that holds content and links
         try {
             Object targetClassInstance = targetClass.newInstance();
             for (Field classField : classFields) {

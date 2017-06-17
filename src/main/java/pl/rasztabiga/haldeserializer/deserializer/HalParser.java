@@ -1,4 +1,4 @@
-package pl.rasztabiga.haldeserializer;
+package pl.rasztabiga.haldeserializer.deserializer;
 
 import org.json.JSONObject;
 import pl.rasztabiga.haldeserializer.exception.DeserializationError;

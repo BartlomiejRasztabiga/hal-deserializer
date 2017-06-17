@@ -1,4 +1,4 @@
-package pl.rasztabiga.haldeserializer;
+package pl.rasztabiga.haldeserializer.deserializer;
 
 import java.net.URL;
 

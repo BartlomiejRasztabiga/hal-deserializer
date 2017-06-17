@@ -1,9 +1,5 @@
-package pl.rasztabiga.haldeserializer;
+package pl.rasztabiga.haldeserializer.deserializer;
 
-import okhttp3.Headers;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import pl.rasztabiga.haldeserializer.exception.ResourceNotFoundException;
 
 import java.io.IOException;
@@ -26,7 +22,7 @@ public class HalDeserializer {
     }
 
     //TODO Repeating code
-    public <T> T toObject(Class<T> targetClass) { //TODO Finish this
+    public <T> T toObject(Class<T> targetClass) {
         String json = "";
         try {
             json = getJsonStringFromUrl();
@@ -53,20 +49,8 @@ public class HalDeserializer {
     }
 
     private String getJsonStringFromUrl() throws IOException, ResourceNotFoundException {
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url(baseUrl) //TODO Add params
-                .headers(Headers.of(httpHeaders))
-                .build();
-
-        Response response = client.newCall(request).execute();
-
-        //TODO Move checking response code to other class
-        if (response.code() == 404 || response.code() == 500 || response.code() == 403 || response.code() == 401) {
-            throw new ResourceNotFoundException("Http code: " + response.code());
-        }
-        return response.body().string();
+        HttpClient client = new HttpClient(baseUrl, httpHeaders);
+        return client.getJsonString();
     }
 
     public static class Builder {

@@ -1,5 +1,7 @@
 package pl.rasztabiga.haldeserializer;
 
+import pl.rasztabiga.haldeserializer.deserializer.Authentication;
+import pl.rasztabiga.haldeserializer.deserializer.HalDeserializer;
 import pl.rasztabiga.haldeserializer.entity.Account;
 
 import java.util.List;
