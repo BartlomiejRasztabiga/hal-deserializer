@@ -11,9 +11,10 @@ public class App {
     public static void main(String[] args) throws Exception {
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + getAuthToken());
+        System.out.println(getAuthToken());
 
         HalDeserializer halDeserializer = new HalDeserializer.Builder()
-                .baseUrl("http://api-v2.eu-central-1.elasticbeanstalk.com/students/s") //TODO Check if URL is good
+                .baseUrl("http://api-v2.eu-central-1.elasticbeanstalk.com/accounts/1")
                 .withHeaders(headers)
                 .withParams(new HashMap<>())
                 .build();

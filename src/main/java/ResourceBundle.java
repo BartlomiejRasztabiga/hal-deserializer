@@ -12,18 +12,34 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ResourceBundle<T> {
+    private Class targetClass;
+    private JSONObject rootObject;
 
     private List<Link> links;
     private List<T> resources;
-    private Class targetClass;
 
     public ResourceBundle(JSONObject root, Class targetClass) {
         this.targetClass = targetClass;
-        this.resources = retrieveResources(root.getJSONObject("_embedded"));
-        this.links = retrieveLinks(root.getJSONObject("_links"));
+        this.rootObject = root;
+
+        //TODO Firstly do some checks
+
     }
 
-    public List<T> getResources() {
+    public List<T> getResources() throws DeserializationError {
+        JSONObject _embedded = null;
+        try {
+            _embedded = rootObject.getJSONObject("_embedded");
+        } catch (JSONException e) {
+            //It might mean that resource is not list
+            if(e.getMessage().contains("JSONObject[\"_embedded\"] not found")) {
+                throw new DeserializationError("Resource cannot be deserialized to list!");
+            }
+        }
+
+        this.resources = retrieveResources(_embedded);
+        this.links = retrieveLinks(rootObject.getJSONObject("_links"));
+
         return resources;
     }
 
@@ -44,7 +60,6 @@ public class ResourceBundle<T> {
 
         Iterator<Object> iterator = root.iterator();
 
-
         List<T> resources = new ArrayList<>();
 
         List<Field> classFields = retrieveClassFieldsList();
@@ -59,18 +74,19 @@ public class ResourceBundle<T> {
         return resources;
     }
 
-    private <T> T parseResource(JSONObject json, List<Field> classFields) {
+    private <T> T parseResource(JSONObject json, List<Field> classFields) { //TODO Add proxy class Resource<T> that holds content and links
         try {
             Object object = targetClass.newInstance();
             for (Field classField : classFields) {
-                Object fieldValue = null;
+                Object fieldValue;
                 try {
                     fieldValue = json.get(classField.getName());
                 } catch (JSONException e) {
                     continue; //IF field is not present in json, skip it
                 }
-                //System.out.println(fieldValue);
                 classField.setAccessible(true);
+
+                //Check if we should parse int to longs (JSON returns int, but ID is of type long)
                 if(fieldValue instanceof Integer) {
                     Long fieldValueNew = (long) (int) fieldValue;
                     classField.set(object, fieldValueNew);
