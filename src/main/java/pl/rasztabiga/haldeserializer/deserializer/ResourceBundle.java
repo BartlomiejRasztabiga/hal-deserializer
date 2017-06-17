@@ -18,8 +18,8 @@ public class ResourceBundle<T> {
     private HalParser parser;
 
     private List<HalLink> halLinks;
-    private List<T> resources;
-    private T resource;
+    private List<Resource<T>> resources;
+    private Resource<T> resource;
 
     ResourceBundle(JSONObject root, Class targetClass) {
         this.targetClass = targetClass;
@@ -27,7 +27,7 @@ public class ResourceBundle<T> {
         this.parser = new HalParser();
     }
 
-    List<T> getResources() throws DeserializationError {
+    List<Resource<T>> getResources() throws DeserializationError { //TODO Maybe add Resources class wrapper
         JSONObject _embedded = null;
         try {
             _embedded = rootObject.getJSONObject("_embedded");
@@ -44,20 +44,20 @@ public class ResourceBundle<T> {
         return resources;
     }
 
-    T getResource() throws DeserializationError {
+    Resource<T> getResource() throws DeserializationError {
         this.resource = retrieveResource(rootObject);
         this.halLinks = parser.retrieveLinks(rootObject.getJSONObject("_links"));
 
         return resource;
     }
 
-    private List<T> retrieveResources(JSONObject _embedded) {
+    private List<Resource<T>> retrieveResources(JSONObject _embedded) {
         String rootObject = _embedded.keySet().toArray()[0].toString(); //maybe
         JSONArray root = _embedded.getJSONArray(rootObject);
 
         Iterator<Object> iterator = root.iterator();
 
-        List<T> resources = new ArrayList<>();
+        List<Resource<T>> resources = new ArrayList<>();
 
         List<Field> classFields = retrieveClassFieldsList();
 
@@ -69,7 +69,7 @@ public class ResourceBundle<T> {
         return resources;
     }
 
-    private T retrieveResource(JSONObject root) {
+    private Resource<T> retrieveResource(JSONObject root) {
         List<Field> classFields = retrieveClassFieldsList();
         resource = parser.parseResource(root, classFields, targetClass);
 

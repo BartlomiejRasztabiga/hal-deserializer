@@ -40,7 +40,7 @@ public class HalDeserializer {
      * @return Deserialized object
      */
     //TODO Repeating code
-    public <T> T toObject(Class<T> targetClass) {
+    public <T> Resource<T> toObject(Class<T> targetClass) {
         String json = "";
         try {
             json = getJsonStringFromUrl();
@@ -49,7 +49,7 @@ public class HalDeserializer {
         } catch (ResourceNotFoundException e) {
             System.out.println("Resource not found. Check your URL. " + e.getMessage());
         }
-        return parseObjectFromJson(json, targetClass);
+        return deserializeObjectFromJson(json, targetClass);
     }
 
     /**
@@ -59,7 +59,7 @@ public class HalDeserializer {
      * @param <T>         Resource type
      * @return Deserialized objects list
      */
-    public <T> List<T> toList(Class<T> targetClass) {
+    public <T> List<Resource<T>> toList(Class<T> targetClass) {
         String json;
         try {
             json = getJsonStringFromUrl();
@@ -70,10 +70,10 @@ public class HalDeserializer {
             System.out.println("Resource not found. Check your URL. " + e.getMessage());
             return Collections.emptyList();
         }
-        return parseListFromJson(json, targetClass);
+        return deserializeListFromJson(json, targetClass);
     }
 
-    <T> T parseObjectFromJson(String json, Class targetClass) {
+    private <T> Resource<T> deserializeObjectFromJson(String json, Class targetClass) {
         if (json.isEmpty()) {
             return null;
         }
@@ -87,7 +87,7 @@ public class HalDeserializer {
         }
     }
 
-    <T> List<T> parseListFromJson(String json, Class targetClass) {
+    private <T> List<Resource<T>> deserializeListFromJson(String json, Class targetClass) {
         if (json.isEmpty()) {
             return Collections.emptyList();
         }

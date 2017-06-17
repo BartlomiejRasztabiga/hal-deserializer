@@ -27,7 +27,7 @@ public class HalParser {
     public HalParser() {
     }
 
-    <T> T parseResource(JSONObject json, List<Field> classFields, Class targetClass) { //TODO Add proxy class Resource<T> that holds content and halLinks
+    <T> Resource<T> parseResource(JSONObject json, List<Field> classFields, Class targetClass) { //TODO Add proxy class Resource<T> that holds content and halLinks
         try {
             Object targetClassInstance = targetClass.newInstance();
             for (Field classField : classFields) {
@@ -77,9 +77,9 @@ public class HalParser {
 
             }
 
-            //TODO I finished here
+            List<HalLink> links = retrieveLinks(json.getJSONObject("_links"));
 
-            return (T) targetClassInstance;
+            return new Resource<>((T)targetClassInstance, links);
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
             return null;
@@ -103,5 +103,5 @@ public class HalParser {
             return new HalLink(name);
         }
     }
-    
+
 }

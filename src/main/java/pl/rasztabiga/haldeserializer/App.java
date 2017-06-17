@@ -2,12 +2,15 @@ package pl.rasztabiga.haldeserializer;
 
 import pl.rasztabiga.haldeserializer.deserializer.Authentication;
 import pl.rasztabiga.haldeserializer.deserializer.HalDeserializer;
+import pl.rasztabiga.haldeserializer.deserializer.Resource;
 import pl.rasztabiga.haldeserializer.entity.Account;
 import pl.rasztabiga.haldeserializer.entity.Student;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class App {
 
@@ -37,7 +40,8 @@ public class App {
                 .build();
 
 
-        Account account = halDeserializer.toObject(Account.class);
+        Resource<Account> accountRes = halDeserializer.toObject(Account.class);
+        Account account = accountRes.getContent();
         System.out.println(account);
     }
 
@@ -47,7 +51,10 @@ public class App {
                 .withAuthentication(authenticationHeader)
                 .build();
 
-        List<Account> accountList = halDeserializer1.toList(Account.class);
+        List<Resource<Account>> accountListRes = halDeserializer1.toList(Account.class);
+        List<Account> accountList = accountListRes.stream()
+                .map(Resource::getContent)
+                .collect(Collectors.toList());
         System.out.println(accountList);
     }
 
@@ -62,7 +69,10 @@ public class App {
                 .withParams(params)
                 .build();
 
-        List<Student> studentList = halDeserializer.toList(Student.class);
+        List<Resource<Student>> studentListRes = halDeserializer.toList(Student.class);
+        List<Student> studentList = studentListRes.stream()
+                .map(Resource::getContent)
+                .collect(Collectors.toList());
         System.out.println(studentList);
     }
 }
