@@ -20,7 +20,7 @@ public class ResourceBundle<T> {
     private List<T> resources;
     private T resource;
 
-    public ResourceBundle(JSONObject root, Class targetClass) {
+    ResourceBundle(JSONObject root, Class targetClass) {
         this.targetClass = targetClass;
         this.rootObject = root;
 
@@ -28,14 +28,14 @@ public class ResourceBundle<T> {
 
     }
 
-    public List<T> getResources() throws DeserializationError {
+    List<T> getResources() throws DeserializationError {
         JSONObject _embedded = null;
         try {
             _embedded = rootObject.getJSONObject("_embedded");
         } catch (JSONException e) {
             //It might mean that resource is not list
             if (e.getMessage().contains("JSONObject[\"_embedded\"] not found")) {
-                throw new DeserializationError("pl.rasztabiga.haldeserializer.deserializer.Resource cannot be deserialized to list!");
+                throw new DeserializationError("Resource cannot be deserialized to list!");
             }
         }
 
@@ -45,7 +45,7 @@ public class ResourceBundle<T> {
         return resources;
     }
 
-    public T getResource() throws DeserializationError {
+    T getResource() throws DeserializationError {
         this.resource = retrieveResource(rootObject);
         this.halLinks = retrieveLinks(rootObject.getJSONObject("_links"));
 

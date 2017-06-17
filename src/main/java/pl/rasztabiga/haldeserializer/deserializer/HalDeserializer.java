@@ -10,6 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Main library class used to proxy between user and HAL parser
+ *
+ * @author Bartłomiej Rasztabiga
+ * @version 1.0
+ * @since 1.0
+ */
 public class HalDeserializer {
     private URL baseUrl;
     private Map<String, String> httpHeaders;
@@ -23,6 +30,13 @@ public class HalDeserializer {
         this.httpParams = new HashMap<>();
     }
 
+    /**
+     * Deserialize single object to given type
+     *
+     * @param targetClass Class to use to deserialize
+     * @param <T>         Resource type
+     * @return Deserialized object
+     */
     //TODO Repeating code
     public <T> T toObject(Class<T> targetClass) {
         String json = "";
@@ -36,6 +50,13 @@ public class HalDeserializer {
         return parser.parseObjectFromJson(json, targetClass);
     }
 
+    /**
+     * Deserialize objects list to given type
+     *
+     * @param targetClass Class to use to deserialize
+     * @param <T>         Resource type
+     * @return Deserialized objects list
+     */
     public <T> List<T> toList(Class<T> targetClass) {
         String json;
         try {
@@ -55,13 +76,29 @@ public class HalDeserializer {
         return client.getJsonString();
     }
 
+    /**
+     * Builder class for HalDeserializer
+     *
+     * @author Bartłomiej Rasztabiga
+     * @version 1.0
+     * @since 1.0
+     */
     public static class Builder {
         private HalDeserializer instance;
 
+        /**
+         * Default constructor
+         */
         public Builder() {
             instance = new HalDeserializer();
         }
 
+        /**
+         * Adds base URL of REST API
+         *
+         * @param url REST APO URL
+         * @return Builder instance
+         */
         public Builder baseUrl(String url) {
             try {
                 instance.baseUrl = new URL(url);
@@ -71,6 +108,12 @@ public class HalDeserializer {
             return this;
         }
 
+        /**
+         * Adds HTTP headers
+         *
+         * @param headers Map representing http headers
+         * @return Builder instance
+         */
         public Builder withHeaders(Map<String, String> headers) {
             if (instance.httpHeaders.size() == 0) {
                 instance.httpHeaders = headers;
@@ -83,16 +126,33 @@ public class HalDeserializer {
             return this;
         }
 
+        /**
+         * Adds Authentication Header
+         *
+         * @param header Authentication.Header instance
+         * @return Builder instance
+         */
         public Builder withAuthentication(Authentication.Header header) {
             instance.httpHeaders.put(Authentication.AUTHORIZATION, header.getToken());
             return this;
         }
 
+        /**
+         * Adds URL parameters
+         *
+         * @param params Map representing URL paremeters
+         * @return Builder instance
+         */
         public Builder withParams(Map<String, String> params) {
             instance.httpParams = params;
             return this;
         }
 
+        /**
+         * Builds instance of HalDeserializer
+         *
+         * @return HalDeserializer instance
+         */
         public HalDeserializer build() {
             return instance;
         }
