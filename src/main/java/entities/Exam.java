@@ -34,4 +34,14 @@ public class Exam {
         return isVisible;
     }
 
+    @Override
+    public String toString() {
+        return "Exam{" +
+                "id=" + id +
+                ", date=" + date +
+                ", subject='" + subject + '\'' +
+                ", description='" + description + '\'' +
+                ", isVisible=" + isVisible +
+                '}';
+    }
 }
