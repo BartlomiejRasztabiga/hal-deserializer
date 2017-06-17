@@ -4,6 +4,7 @@ import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import pl.rasztabiga.haldeserializer.exception.ResourceNotFoundException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -37,7 +38,7 @@ public class HalDeserializer {
         return parser.parseObjectFromJson(json, targetClass);
     }
 
-    public <T> List<T> toList(Class<T> targetClass) { //TODO Make targetClass more generic
+    public <T> List<T> toList(Class<T> targetClass) {
         String json;
         try {
             json = getJsonStringFromUrl();

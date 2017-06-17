@@ -1,8 +1,8 @@
 package pl.rasztabiga.haldeserializer;
 
-import pl.rasztabiga.haldeserializer.entities.Account;
+import pl.rasztabiga.haldeserializer.entity.Account;
 
-import java.util.HashMap;
+import java.util.List;
 
 public class App {
 
@@ -22,8 +22,17 @@ public class App {
                 .withAuthentication(authenticationHeader)
                 .build();
 
+
         Account account = halDeserializer.toObject(Account.class);
         System.out.println(account);
+
+        HalDeserializer halDeserializer1 = new HalDeserializer.Builder()
+                .baseUrl("http://api-v2.eu-central-1.elasticbeanstalk.com/accounts")
+                .withAuthentication(authenticationHeader)
+                .build();
+
+        List<Account> accountList = halDeserializer1.toList(Account.class);
+        System.out.println(accountList);
 
     }
 }

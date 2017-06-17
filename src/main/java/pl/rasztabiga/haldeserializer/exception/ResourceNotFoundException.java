@@ -1,4 +1,4 @@
-package pl.rasztabiga.haldeserializer;
+package pl.rasztabiga.haldeserializer.exception;
 
 public class ResourceNotFoundException extends Exception {
     public ResourceNotFoundException(String s) {

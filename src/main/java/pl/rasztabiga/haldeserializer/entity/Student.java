@@ -1,4 +1,4 @@
-package pl.rasztabiga.haldeserializer.entities;
+package pl.rasztabiga.haldeserializer.entity;
 
 public class Student {
 
@@ -34,7 +34,7 @@ public class Student {
 
     @Override
     public String toString() {
-        return "pl.rasztabiga.haldeserializer.entities.Student{" +
+        return "pl.rasztabiga.haldeserializer.entity.Student{" +
                 "id=" + id +
                 ", studentNumber=" + studentNumber +
                 ", studentName='" + studentName + '\'' +

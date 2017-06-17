@@ -3,6 +3,7 @@ package pl.rasztabiga.haldeserializer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import pl.rasztabiga.haldeserializer.exception.DeserializationError;
 
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;

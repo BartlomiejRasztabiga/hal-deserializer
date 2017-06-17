@@ -1,4 +1,4 @@
-package pl.rasztabiga.haldeserializer.entities;
+package pl.rasztabiga.haldeserializer.entity;
 
 public class SurveyOption {
 

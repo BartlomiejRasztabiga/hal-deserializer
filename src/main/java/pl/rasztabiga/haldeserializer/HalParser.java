@@ -1,6 +1,7 @@
 package pl.rasztabiga.haldeserializer;
 
 import org.json.JSONObject;
+import pl.rasztabiga.haldeserializer.exception.DeserializationError;
 
 import java.util.Collections;
 import java.util.List;
