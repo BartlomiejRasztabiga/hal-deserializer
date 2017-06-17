@@ -39,7 +39,6 @@ public class HalDeserializer {
      * @param <T>         Resource type
      * @return Deserialized object
      */
-    //TODO Repeating code
     public <T> Resource<T> toObject(Class<T> targetClass) {
         String json = "";
         try {
