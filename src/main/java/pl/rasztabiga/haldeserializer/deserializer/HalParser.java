@@ -60,7 +60,7 @@ public class HalParser {
 
                 //Check if we should parse int to longs (JSON returns int, but ID is of type long)
                 if (fieldValue instanceof Integer && classField.getType().equals(Long.class)) {
-                    Long fieldValueNew = (long) fieldValue;
+                    Long fieldValueNew = (long) (int) fieldValue;
                     classField.set(targetClassInstance, fieldValueNew);
                 }
                 //Check if we should convert JSONArray to List
