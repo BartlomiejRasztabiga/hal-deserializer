@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="hal-deserializer_main" target="1.8" />
-      <module name="hal-deserializer_test" target="1.8" />
+      <module name="hal-deserializer_main" target="1.7" />
+      <module name="hal-deserializer_test" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>
