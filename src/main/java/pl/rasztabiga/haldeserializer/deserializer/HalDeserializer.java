@@ -167,6 +167,16 @@ public class HalDeserializer {
         }
 
         /**
+         * Adds accessToken to authentication header
+         * @param accessToken OAuth access token
+         * @return Builder instance
+         */
+        public Builder withAuthentication(String accessToken) {
+            instance.httpHeaders.put(Authentication.AUTHORIZATION, Authentication.BEARER + " " + accessToken);
+            return this;
+        }
+
+        /**
          * Adds URL parameters
          *
          * @param params Map representing URL paremeters
