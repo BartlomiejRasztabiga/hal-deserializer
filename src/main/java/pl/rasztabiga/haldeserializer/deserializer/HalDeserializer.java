@@ -16,7 +16,7 @@ import java.util.Map;
  * Main library class used to proxy between user and HAL parser
  *
  * @author Bartłomiej Rasztabiga
- * @version 1.0
+ * @version 1.0.0
  * @since 1.0
  */
 public class HalDeserializer {
@@ -109,7 +109,7 @@ public class HalDeserializer {
      * Builder class for HalDeserializer
      *
      * @author Bartłomiej Rasztabiga
-     * @version 1.0
+     * @version 1.0.0
      * @since 1.0
      */
     public static class Builder {
@@ -152,17 +152,6 @@ public class HalDeserializer {
                 }
             }
 
-            return this;
-        }
-
-        /**
-         * Adds Authentication Header
-         *
-         * @param header Authentication.Header instance
-         * @return Builder instance
-         */
-        public Builder withAuthentication(Authentication.Header header) {
-            instance.httpHeaders.put(Authentication.AUTHORIZATION, header.getToken());
             return this;
         }
 
