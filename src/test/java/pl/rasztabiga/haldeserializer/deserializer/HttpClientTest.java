@@ -1,8 +1,10 @@
 package pl.rasztabiga.haldeserializer.deserializer;
 
 import org.junit.Test;
+import pl.rasztabiga.haldeserializer.exception.ResourceNotFoundException;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.HashMap;
@@ -81,6 +83,27 @@ public class HttpClientTest {
 
         // To know that it certainly is JSON
         assertTrue(jsonString.startsWith("{"));
-        assertTrue(jsonString.endsWith("}"));
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void getJsonStringFrom404NotFoundUrl_throwsResourceNotFoundException_test() throws Exception {
+        String mockBaseUrl = "https://httpbin.org/status/404";
+
+        HttpClient httpClient = new HttpClient(
+                new URL(mockBaseUrl),
+                new HashMap<String, String>(),
+                new HashMap<String, String>()
+        );
+
+        Method addParamsToURLMethod = HttpClient.class.getDeclaredMethod("getJsonString");
+        addParamsToURLMethod.setAccessible(true);
+
+        try {
+            addParamsToURLMethod.invoke(httpClient);
+        }  catch (InvocationTargetException e) {
+            if (e.getCause() instanceof ResourceNotFoundException) {
+                throw new ResourceNotFoundException(e);
+            }
+        }
     }
 }
