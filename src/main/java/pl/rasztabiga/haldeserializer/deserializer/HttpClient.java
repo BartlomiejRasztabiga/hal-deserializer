@@ -51,6 +51,10 @@ public class HttpClient {
             stringBuilder.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
         }
 
-        this.baseUrl = new URL(baseUrl.toString() + stringBuilder.toString());
+        String paramsURL = stringBuilder.toString();
+        String lastChar = paramsURL.substring(paramsURL.length() - 1);
+        if (lastChar.equals("&")) paramsURL = paramsURL.substring(0, paramsURL.length() - 1); //IF & is last char, remove it
+
+        this.baseUrl = new URL(baseUrl.toString() + paramsURL);
     }
 }
