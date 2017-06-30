@@ -168,6 +168,7 @@ public class HalDeserializer {
 
         /**
          * Adds accessToken to authentication header
+         *
          * @param accessToken OAuth access token
          * @return Builder instance
          */
