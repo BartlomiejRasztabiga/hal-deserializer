@@ -1,5 +1,9 @@
 package pl.rasztabiga.haldeserializer.deserializer;
 
+import pl.rasztabiga.haldeserializer.json.JSONArray;
+import pl.rasztabiga.haldeserializer.json.JSONException;
+import pl.rasztabiga.haldeserializer.json.JSONObject;
+
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -8,10 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import pl.rasztabiga.haldeserializer.json.JSONArray;
-import pl.rasztabiga.haldeserializer.json.JSONException;
-import pl.rasztabiga.haldeserializer.json.JSONObject;
 
 /**
  * HalParser class representing HAL+JSON parser
