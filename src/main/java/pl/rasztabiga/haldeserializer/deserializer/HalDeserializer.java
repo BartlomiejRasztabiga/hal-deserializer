@@ -128,12 +128,8 @@ public class HalDeserializer {
          * @param url REST APO URL
          * @return Builder instance
          */
-        public Builder baseUrl(String url) {
-            try {
-                instance.baseUrl = new URL(url);
-            } catch (MalformedURLException e) {
-                System.out.println("Wrong URL!");
-            }
+        public Builder baseUrl(String url) throws MalformedURLException {
+            instance.baseUrl = new URL(url);
             return this;
         }
 
