@@ -32,7 +32,10 @@ public class HalParser {
     @SuppressWarnings("unchecked")
     <T> T parseResource(JSONObject json, List<Field> classFields, Class targetClass) { //TODO Add proxy class Resource<T> that holds content and halLinks
         try {
+            //Target class has to have public empty constructor,
+            //Otherwise this will throw an Exception
             Object targetClassInstance = targetClass.newInstance();
+
             for (Field classField : classFields) {
                 Object fieldValue = null;
                 try {

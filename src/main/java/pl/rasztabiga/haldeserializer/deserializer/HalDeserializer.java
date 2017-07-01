@@ -126,6 +126,7 @@ public class HalDeserializer {
          * Adds base URL of REST API
          *
          * @param url REST APO URL
+         * @throws MalformedURLException When given URL is incorrect
          * @return Builder instance
          */
         public Builder baseUrl(String url) throws MalformedURLException {

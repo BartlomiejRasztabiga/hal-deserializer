@@ -64,6 +64,7 @@ public class HttpClientTest {
         assertEquals(mockBaseUrl, baseURL);
     }
 
+    //Integration test
     @Test
     public void getJsonStringFromRestApi_test() throws Exception {
         String mockBaseUrl = "https://httpbin.org/get";
@@ -102,7 +103,7 @@ public class HttpClientTest {
             addParamsToURLMethod.invoke(httpClient);
         }  catch (InvocationTargetException e) {
             if (e.getCause() instanceof ResourceNotFoundException) {
-                throw new ResourceNotFoundException(e);
+                throw new ResourceNotFoundException(e.getCause());
             }
         }
     }
